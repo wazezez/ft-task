@@ -1,0 +1,29 @@
+{
+  "_axios-CCb-kr4I.js": {
+    "file": "assets/axios-CCb-kr4I.js",
+    "name": "axios"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Qv8jo91D.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_axios-CCb-kr4I.js"
+    ]
+  },
+  "resources/js/vue/index.js": {
+    "file": "assets/index-CmyG9ywS.js",
+    "name": "index",
+    "src": "resources/js/vue/index.js",
+    "isEntry": true,
+    "imports": [
+      "_axios-CCb-kr4I.js"
+    ]
+  },
+  "resources/sass/app.scss": {
+    "file": "assets/app-vUGqDw18.css",
+    "src": "resources/sass/app.scss",
+    "isEntry": true
+  }
+}

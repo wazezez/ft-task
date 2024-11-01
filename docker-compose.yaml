@@ -1,0 +1,61 @@
+services:
+  webserver:
+    image: nginx:stable-alpine
+    container_name: ${PROJECT_NAME}-webserver
+    working_dir: /backend-app
+    volumes:
+      - ./src/backend:/backend-app
+      - ./configuration/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "8008:80"
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    container_name: ${PROJECT_NAME}-redis
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:14-alpine
+    container_name: ${PROJECT_NAME}-postgres
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5435:5432"
+    networks:
+      - app-network
+
+  php-fpm:
+    build:
+      context: dockerfiles
+      dockerfile: php.Dockerfile
+    container_name: ${PROJECT_NAME}-php-fpm
+    working_dir: /backend-app
+    command:
+    volumes:
+      - ./src/backend:/backend-app
+      - ./configuration/php/php-ini-overrides.ini:/etc/php/8.2/fpm/conf.d/99-overrides.ini
+    networks:
+      - app-network
+
+  frontend-builder:
+    build:
+      context: dockerfiles
+      dockerfile: frontend.Dockerfile
+    working_dir: /backend-app
+    volumes:
+      - ./src/backend:/backend-app
+    ports:
+      - 3000:3000
+    environment:
+      NODE_ENV: production
+
+networks:
+  app-network:
+    driver: bridge
